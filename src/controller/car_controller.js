@@ -50,13 +50,42 @@ const add_car = async (req, res) => {
 
 const list_all_cars = async (req, res) => {
   try {
-    let all_cars = await Car.find().sort({
-      createdAT: -1,
-    });
+    let search = req.query.search;
+    let page = parseInt(req.query.page);
+    let limit = parseInt(req.query.limit);
+    if (!page) {
+      page = 1;
+    }
+    if (!limit) {
+      limit = 10;
+    }
+    let skip = (page - 1) * limit;
+    let query;
+    if (search) {
+      console.log("here");
+      query = {
+        $or: [
+          { model_number: { $regex: search, $options: "i" } },
+          { chiesses_number: { $regex: search, $options: "i" } },
+          { engine_number: { $regex: search, $options: "i" } },
+          { registration_number: { $regex: search, $options: "i" } },
+        ],
+      };
+    } else {
+      query = {};
+    }
 
+    let all_cars = await Car.find(query).skip(skip).limit(limit);
+    let total_couint = await Car.countDocuments();
+    let total_pages = Math.ceil(total_couint / limit);
+    let load_more_url =
+      "/car/list_all_cars?page=" + (page + 1) + "&limit=" + limit;
     res.status(200).json({
       code: 200,
       message: "List All Cars",
+      total_couint: total_couint,
+      total_pages: total_pages,
+      load_more_url: load_more_url,
       cars: all_cars,
     });
   } catch (error) {
@@ -66,28 +95,28 @@ const list_all_cars = async (req, res) => {
 
 // search car
 
-const search_car = async (req, res) => {
-  try {
-    let search = req.query.search;
+// const search_car = async (req, res) => {
+//   try {
+//     let search = req.query.search;
 
-    let search_car = await Car.find({
-      $or: [
-        { model_number: { $regex: search, $options: "i" } },
-        { chiesses_number: { $regex: search, $options: "i" } },
-        { engine_number: { $regex: search, $options: "i" } },
-        { registration_number: { $regex: search, $options: "i" } },
-      ],
-    });
+//     let search_car = await Car.find({
+//       $or: [
+//         { model_number: { $regex: search, $options: "i" } },
+//         { chiesses_number: { $regex: search, $options: "i" } },
+//         { engine_number: { $regex: search, $options: "i" } },
+//         { registration_number: { $regex: search, $options: "i" } },
+//       ],
+//     });
 
-    res.status(200).json({
-      code: 200,
-      message: "Car Result by Search",
-      cars: search_car,
-    });
-  } catch (error) {
-    return res.status(500).json({ error: error.message });
-  }
-};
+//     res.status(200).json({
+//       code: 200,
+//       message: "Car Result by Search",
+//       cars: search_car,
+//     });
+//   } catch (error) {
+//     return res.status(500).json({ error: error.message });
+//   }
+// };
 
 // detail car by id
 
@@ -108,6 +137,6 @@ const detail_car_by = async (req, res) => {
 module.exports = {
   add_car,
   list_all_cars,
-  search_car,
+  // search_car,
   detail_car_by,
 };
