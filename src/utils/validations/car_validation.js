@@ -6,7 +6,6 @@ const car_validation = async (body) => {
     chiesses_number: Joi.string().required(),
     engine_number: Joi.string().required(),
     registration_number: Joi.string().required(),
-    image: Joi.string().required(),
   });
   return schema.validate(body);
 };

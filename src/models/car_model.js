@@ -16,7 +16,12 @@ const carSchema = new mongoos.Schema(
       type: String,
     },
     image: {
-      type: String,
+      public_id: {
+        type: String,
+      },
+      url: {
+        type: String,
+      },
     },
     user: {
       type: mongoos.Schema.Types.ObjectId,
@@ -27,6 +32,7 @@ const carSchema = new mongoos.Schema(
       default: false,
     },
   },
+
   { timestamps: true }
 );
 

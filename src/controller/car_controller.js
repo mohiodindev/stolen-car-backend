@@ -1,6 +1,8 @@
 const Car = require("../models/car_model");
 const { car_validation } = require("../utils/validations/car_validation");
 
+const { upload_image_on_cloudinary } = require("../utils/utils");
+
 // add new car
 
 const add_car = async (req, res) => {
@@ -13,26 +15,38 @@ const add_car = async (req, res) => {
       });
     }
 
-    let {
-      model_nimber,
-      chiesses_number,
-      engine_number,
-      registration_number,
-      image,
-    } = req.body;
+    // let {
+    //   model_nimber,
+    //   chiesses_number,
+    //   engine_number,
+    //   registration_number,
+    //   image,
+    // } = req.body;
 
-    // let car = new Car({
-    //   model_nimber: req.body.model_number,
-    //   chiesses_number: req.body.chiesses_number,
-    //   engine_number: req.body.engine_number,
-    //   registration_number: req.body.registration_number,
-    //   image: req.body.image,
-    //   user: req.user._id,
-    // });
+    console.log(req.files);
 
-    let user = req.user._id;
+    let car_image = await upload_image_on_cloudinary(
+      req.files.image.tempFilePath,
+      "car_images"
+    );
 
-    let car = new Car(req.body, user);
+    console.log(car_image);
+
+    let car = new Car({
+      model_nimber: req.body.model_number,
+      chiesses_number: req.body.chiesses_number,
+      engine_number: req.body.engine_number,
+      registration_number: req.body.registration_number,
+      image: {
+        url: car_image.url,
+        public_id: car_image.public_id,
+      },
+      user: req.user._id,
+    });
+
+    // let user = req.user._id;
+
+    // let car = new Car(req.body, user);
 
     await car.save();
 

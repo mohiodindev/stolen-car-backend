@@ -9,7 +9,6 @@ const authebtication = async (req, res, next) => {
 
     let decoded = jwt.verify(token, process.env.TOKEN_SECRET);
     let user = await User.findOne({ _id: decoded._id });
-    console.log(user);
     if (!user) {
       return res.status(401).json({ code: 401, message: "Login First? ..." });
     }
