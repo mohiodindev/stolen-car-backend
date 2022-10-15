@@ -3,6 +3,7 @@ const User = require("../models/user_model");
 
 const authebtication = async (req, res, next) => {
   try {
+    console.log("hdhhdhhhdhd");
     let token = req.header("x-sh-auth");
     if (!token)
       return res.status(401).json({ code: 401, message: "Login First? ..." });

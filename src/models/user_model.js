@@ -31,7 +31,7 @@ const UserSchema = new mongoose.Schema({
 
   login_type: {
     type: String,
-    enum: ["cnic", "email"],
+    enum: ["cnic", "email", "police"],
   },
 
   tokens: [

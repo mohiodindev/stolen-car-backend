@@ -13,6 +13,20 @@ const upload_image_on_cloudinary = async (image, file_path) => {
   }
 };
 
+// delete image from cloudaniry
+
+const delete_image_from_cloudinary = async (public_id) => {
+  try {
+    let image_delete = await cloudinary.uploader.destroy(public_id, {
+      invalidate: true,
+    });
+    return image_delete;
+  } catch (error) {
+    return error;
+  }
+};
+
 module.exports = {
   upload_image_on_cloudinary,
+  delete_image_from_cloudinary,
 };

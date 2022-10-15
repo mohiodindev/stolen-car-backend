@@ -117,6 +117,8 @@ const login_user = async (req, res) => {
     login_by = "user";
   } else if (user.user_type === "admin") {
     login_by = "admin";
+  } else if (user.user_type === "police") {
+    login_by = "police";
   }
 
   let token = jwt.sign(
