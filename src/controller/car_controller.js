@@ -4,6 +4,7 @@ const { car_validation } = require("../utils/validations/car_validation");
 const {
   upload_image_on_cloudinary,
   delete_image_from_cloudinary,
+  generate_pdf,
 } = require("../utils/utils");
 
 // add new car
@@ -260,10 +261,88 @@ const update_car = async (req, res) => {
   }
 };
 
+// list all cars and generate pdf
+
+const list_all_cars_pdf = async (req, res) => {
+  try {
+    let all_cars = await Car.find();
+
+    // generate pdf
+
+    // let cars_pdf = await generate_pdf(all_cars);
+    // console.log(cars_pdf);
+    // let total_couint = await Car.countDocuments();
+    // let total_pages = Math.ceil(total_couint / limit);
+    // let load_more_url =
+    //   "/car/list_all_cars?page=" + (page + 1) + "&limit=" + limit;
+    res.status(200).json({
+      code: 200,
+      message: "List All Cars",
+      // total_couint: total_couint,
+      // total_pages: total_pages,
+      // load_more_url: load_more_url,
+      cars: all_cars,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error: error.message });
+  }
+};
+
+// change status in case of car recovery
+
+const change_status_of_recoverd_car = async (req, res) => {
+  try {
+    let recoverd_car_id = req.params.id;
+
+    let find_car = await Car.findOne({
+      _id: recoverd_car_id,
+      is_found: false,
+    });
+
+    if (!find_car) {
+      return res.status(400).json({
+        code: 400,
+        message: "No car Found Or Car has already recoverd",
+      });
+    }
+
+    find_car.is_found = true;
+    await find_car.save();
+
+    return res.status(200).json({
+      code: 200,
+      message: "Car Status Changed Succesfully",
+    });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
+// list recoverd cars
+
+const list_recoverd_cars = async (req, res) => {
+  try {
+    let recoverd_cars = await Car.find({
+      is_found: true,
+    });
+    return res.status(200).json({
+      code: 200,
+      message: "List All Cars Recoverd",
+      recoverd_cars: recoverd_cars,
+    });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   add_car,
   list_all_cars,
   detail_car_by,
   delete_car_by_id,
   update_car,
+  list_all_cars_pdf,
+  change_status_of_recoverd_car,
+  list_recoverd_cars,
 };

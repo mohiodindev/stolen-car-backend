@@ -7,6 +7,11 @@ var logger = require("morgan");
 const { connect_db } = require("./src/database/connect_database");
 const cloudinary = require("cloudinary").v2;
 const bodyParser = require("body-parser");
+var cron = require("node-cron");
+
+// cron.schedule(" */1 * * * *", () => {
+//   console.log("running a task every second");
+// });
 
 cloudinary.config({
   cloud_name: "dzfohgboo",

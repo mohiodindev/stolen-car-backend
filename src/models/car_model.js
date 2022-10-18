@@ -47,6 +47,7 @@ carSchema.methods.toJSON = function () {
     "registration_number",
     "image",
     "user",
+    "is_found",
     "createdAt",
     "updatedAt",
   ]);
