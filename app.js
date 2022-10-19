@@ -8,9 +8,11 @@ const { connect_db } = require("./src/database/connect_database");
 const cloudinary = require("cloudinary").v2;
 const bodyParser = require("body-parser");
 var cron = require("node-cron");
+const { generate_pdf, generate_csv } = require("./src/utils/utils");
 
-// cron.schedule(" */1 * * * *", () => {
+// cron.schedule(" * * * * * *", () => {
 //   console.log("running a task every second");
+//   generate_csv();
 // });
 
 cloudinary.config({
@@ -22,6 +24,7 @@ cloudinary.config({
 var indexRouter = require("./src/routes/index");
 var usersRouter = require("./src/routes/users");
 const carRouter = require("./src/routes/car");
+const reportRouter = require("./src/routes/report");
 const fileUpload = require("express-fileupload");
 
 var app = express();
@@ -45,6 +48,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/car", carRouter);
+app.use("/report", reportRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

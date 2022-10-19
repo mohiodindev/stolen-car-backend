@@ -5,6 +5,7 @@ const {
   upload_image_on_cloudinary,
   delete_image_from_cloudinary,
   generate_pdf,
+  generate_csv,
 } = require("../utils/utils");
 
 // add new car
@@ -47,7 +48,7 @@ const add_car = async (req, res) => {
     // console.log(car_image);
 
     let car = new Car({
-      model_nimber: req.body.model_number,
+      model_number: req.body.model_number,
       chiesses_number: req.body.chiesses_number,
       engine_number: req.body.engine_number,
       registration_number: req.body.registration_number,
@@ -269,7 +270,7 @@ const list_all_cars_pdf = async (req, res) => {
 
     // generate pdf
 
-    // let cars_pdf = await generate_pdf(all_cars);
+    let cars_pdf = await generate_pdf();
     // console.log(cars_pdf);
     // let total_couint = await Car.countDocuments();
     // let total_pages = Math.ceil(total_couint / limit);
@@ -282,6 +283,7 @@ const list_all_cars_pdf = async (req, res) => {
       // total_pages: total_pages,
       // load_more_url: load_more_url,
       cars: all_cars,
+      pdf_url: cars_pdf.secure_url,
     });
   } catch (error) {
     console.log(error);
@@ -335,6 +337,9 @@ const list_recoverd_cars = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
+
+// genertse Reprts of All cars
+
 
 module.exports = {
   add_car,
