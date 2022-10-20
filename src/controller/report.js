@@ -9,17 +9,15 @@ const {
 
 const generate_report_of_all_cars = async (req, res) => {
   try {
-      let cars_report = await generate_csv();
-      
-      console.log(cars_report);
+    let cars_report = await generate_csv();
 
-    let uplod_report = await upload_file_on_cloudinary(cars_report, "report");
-    console.log(uplod_report);
+    console.log(cars_report);
+
     // save report in database
 
     let report_obj = {
-      url: uplod_report.url,
-      public_id: uplod_report.public_id,
+      url: cars_report.secure_url,
+      public_id: cars_report.public_id,
     };
 
     let action_id = req.user._id;

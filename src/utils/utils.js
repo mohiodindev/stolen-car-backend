@@ -92,16 +92,43 @@ const generate_csv = async () => {
       { header: "Chiesses Number", key: "chiesses_number", width: 30 },
       { header: "Engine Number", key: "engine_number", width: 30 },
       { header: "Registration Number", key: "registration_number", width: 30 },
-      { header: "Owner Name", key: "user", width: 30 },
+      { header: "Owner Name", key: "Owner", width: 30 },
+      { header: "Reported At", key: "createdAt", width: 30 },
+      { header: "Image", key: "image", width: 30 },
     ];
 
     car.forEach((car) => {
-      worksheet.addRow(car);
+      worksheet.addRow({
+        model_number: car.model_number,
+        chiesses_number: car.chiesses_number,
+        engine_number: car.engine_number,
+        registration_number: car.registration_number,
+        Owner: car.user.first_name + " " + car.user.last_name,
+        createdAt: car.createdAt,
+        image: car.image.url,
+      });
     });
 
-    let report = await workbook.xlsx.writeFile("cars.xlsx");
+    // generate csv file
 
-    return report;
+    let xls = await workbook.xlsx.writeFile("cars.xlsx");
+
+    // upload csv file to cloudinary
+
+    let file_name = "cars.csv";
+    let file_path = "csv_files";
+
+    let csv_upload = await cloudinary.uploader.upload("cars.xlsx", {
+      folder: file_path,
+      filename_override: file_name,
+      resource_type: "auto",
+    });
+
+    // delete csv file from local storage and temp folder
+
+    fs.unlinkSync("cars.xlsx");
+
+    return csv_upload;
   } catch (error) {
     console.log(error);
   }
