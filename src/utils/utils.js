@@ -4,6 +4,7 @@ const fs = require("fs");
 const Car = require("../models/car_model");
 const { path } = require("pdfkit");
 const ExcelJs = require("exceljs");
+const Report = require("../models/report");
 
 // function to upload image
 
@@ -80,9 +81,6 @@ const generate_pdf = async () => {
 const generate_csv = async () => {
   try {
     let car = await Car.find({}).populate("user", "first_name  last_name");
-
-    // generate csv from database data and save it in csv folder
-
     const workbook = new ExcelJs.Workbook();
     const worksheet = workbook.addWorksheet("Cars");
 
@@ -147,10 +145,27 @@ const upload_file_on_cloudinary = async (file, file_path) => {
   }
 };
 
+const delete_reports = async () => {
+  try {
+    let today_date = new Date();
+    let last_month_date = new Date(
+      today_date.setMonth(today_date.getMonth() - 1)
+    );
+    let report = await Report.deleteMany({
+      createdAt: { $lte: last_month_date },
+    });
+    console.log("Report Deleted");
+    return report;
+  } catch (error) {
+    return error;
+  }
+};
+
 module.exports = {
   upload_image_on_cloudinary,
   delete_image_from_cloudinary,
   generate_pdf,
   generate_csv,
   upload_file_on_cloudinary,
+  delete_reports,
 };

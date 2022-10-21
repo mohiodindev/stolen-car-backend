@@ -8,12 +8,13 @@ const { connect_db } = require("./src/database/connect_database");
 const cloudinary = require("cloudinary").v2;
 const bodyParser = require("body-parser");
 var cron = require("node-cron");
-const { generate_pdf, generate_csv } = require("./src/utils/utils");
 
-// cron.schedule(" * * * * * *", () => {
-//   console.log("running a task every second");
-//   generate_csv();
-// });
+const { delete_reports } = require("./src/utils/utils");
+
+cron.schedule(" 1 9 * * *", () => {
+  console.log("Crone Working for delete reprot");
+  delete_reports();
+});
 
 cloudinary.config({
   cloud_name: "dzfohgboo",

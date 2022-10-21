@@ -11,6 +11,10 @@ const reportSchema = new mongoos.Schema(
         type: String,
       },
     },
+
+    action_by: {
+      type: String,
+    },
     action_id: {
       type: mongoos.Schema.Types.ObjectId,
       ref: "user",
