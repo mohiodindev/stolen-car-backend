@@ -47,6 +47,19 @@ const UserSchema = new mongoose.Schema({
     enum: ["admin", "user"],
     default: "user",
   },
+
+  status: {
+    type: Boolean,
+    default: true,
+  },
+  image: {
+    public_id: {
+      type: String,
+    },
+    url: {
+      type: String,
+    },
+  },
 });
 UserSchema.pre("save", async function (next) {
   const salt = await bcrypt.genSalt();
@@ -71,6 +84,9 @@ UserSchema.methods.toJSON = function () {
     "contact_number",
     "cnic",
     "login_type",
+    "user_type",
+    "status",
+    "image",
   ]);
 };
 

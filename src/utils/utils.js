@@ -154,6 +154,20 @@ const delete_reports = async () => {
     let report = await Report.deleteMany({
       createdAt: { $lte: last_month_date },
     });
+
+    // delete report file from cloudanry
+
+    let delete_file_promise = await Promise.all(
+      report.map(async (report) => {
+        let delete_file = await cloudinary.uploader.destroy(report.public_id, {
+          invalidate: true,
+        });
+
+        console.log("delete_file", delete_file);
+        return delete_file;
+      })
+    );
+
     console.log("Report Deleted");
     return report;
   } catch (error) {
