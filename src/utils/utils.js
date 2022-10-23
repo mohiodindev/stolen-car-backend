@@ -5,6 +5,7 @@ const Car = require("../models/car_model");
 const { path } = require("pdfkit");
 const ExcelJs = require("exceljs");
 const Report = require("../models/report");
+const { createTransport } = require("nodemailer");
 
 // function to upload image
 
@@ -174,6 +175,27 @@ const delete_reports = async () => {
     return error;
   }
 };
+const SEND_MAIL = async (email, subject, text) => {
+  try {
+    const transport = createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL,
+        pass: process.env.PASSWORD,
+      },
+    });
+
+    await transport.sendMail({
+      from: process.env.EMAIL,
+      to: email,
+      subject,
+      text,
+    });
+  } catch (error) {
+    console.log(error.message);
+    process.exit(1);
+  }
+};
 
 module.exports = {
   upload_image_on_cloudinary,
@@ -182,4 +204,5 @@ module.exports = {
   generate_csv,
   upload_file_on_cloudinary,
   delete_reports,
+  SEND_MAIL,
 };

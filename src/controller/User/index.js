@@ -5,6 +5,8 @@ const update_profile = require("./update_profile");
 const change_password = require("./change_password");
 const delete_user_account = require("./delete_account");
 const delete_user_account_by_admin = require("./delete_user_account_by_admin");
+const forgot_password = require("./forgot_password");
+const reset_password = require("./reset_password");
 
 module.exports = {
   signup_user,
@@ -14,4 +16,6 @@ module.exports = {
   change_password,
   delete_user_account,
   delete_user_account_by_admin,
+  forgot_password,
+  reset_password,
 };

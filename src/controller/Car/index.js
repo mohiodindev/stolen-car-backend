@@ -7,11 +7,11 @@ const delete_car = require("./delete_car");
 const get_car_by_id = require("./detail_car");
 
 module.exports = {
-    add_car,
-    list_all_cars,
-    list_recoverd_cars,
-    change_status_of_recoverd_car,
-    update_car,
-    delete_car,
-    get_car_by_id
-}
+  add_car,
+  list_all_cars,
+  list_recoverd_cars,
+  change_status_of_recoverd_car,
+  update_car,
+  delete_car,
+  get_car_by_id,
+};

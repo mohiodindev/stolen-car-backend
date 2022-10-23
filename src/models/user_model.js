@@ -60,6 +60,11 @@ const UserSchema = new mongoose.Schema({
       type: String,
     },
   },
+
+  reset_password_code: {
+    type: String,
+    default: "",
+  },
 });
 UserSchema.pre("save", async function (next) {
   const salt = await bcrypt.genSalt();
@@ -82,6 +87,7 @@ UserSchema.methods.toJSON = function () {
     "last_name",
     "email",
     "contact_number",
+    "reset_password_code",
     "cnic",
     "login_type",
     "user_type",
